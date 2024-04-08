@@ -1,7 +1,10 @@
 package com.vhp.clockinginapi.controllers;
 
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,8 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vhp.clockinginapi.dtos.ApiResponseDTO;
 import com.vhp.clockinginapi.dtos.CheckPointDTO;
+import com.vhp.clockinginapi.dtos.CheckPointRequestDTO;
+import com.vhp.clockinginapi.dtos.SummaryDTO;
+import com.vhp.clockinginapi.models.enums.JobType;
 import com.vhp.clockinginapi.services.CheckPointService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -25,12 +32,29 @@ public class CheckPointController {
 
   @PostMapping("/clock-in")
   @PreAuthorize("hasRole('EMPLOYEE')")
-  public ResponseEntity<ApiResponseDTO<CheckPointDTO>> create(@Valid @RequestBody CheckPointDTO dto) {
+  public ResponseEntity<ApiResponseDTO<CheckPointDTO>> create(@Valid @RequestBody CheckPointRequestDTO dto, HttpServletRequest request) {
+    UUID userId = UUID.fromString(request.getAttribute("userId").toString()) ;
     return ResponseEntity.ok(
       new ApiResponseDTO<>(
         true,
         "Success. Clock in registered",
-        this.checkPointService.create(dto),
+        this.checkPointService.create(dto, userId),
+        null
+      )
+    );
+  }
+
+  @GetMapping("/summary")
+  @PreAuthorize("hasRole('EMPLOYEE')")
+  public ResponseEntity<ApiResponseDTO<SummaryDTO>> create(HttpServletRequest request) {
+    UUID userId = UUID.fromString(request.getAttribute("userId").toString());
+    String jobType = request.getAttribute("jobType").toString();
+    
+    return ResponseEntity.ok(
+      new ApiResponseDTO<>(
+        true,
+        "Retrive user summary with success.",
+        this.checkPointService.getSummary(userId, jobType),
         null
       )
     );
