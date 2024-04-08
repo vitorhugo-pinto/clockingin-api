@@ -37,6 +37,7 @@ public class AuthenticateFilter extends OncePerRequestFilter {
           return;
         }
         request.setAttribute("userId", jwtDecoded.getSubject());
+        request.setAttribute("jobType", jwtDecoded.getClaim("jobType"));
                     
         var rolesFromClaim = jwtDecoded.getClaim("roles").asList(Object.class);
 

@@ -40,6 +40,7 @@ public class JWTService {
 
     var jwt = JWT.create()
       .withIssuer(userDetails.getUsername())
+      .withClaim("jobType", user.getJobType().toString())
       .withClaim("roles", Arrays.asList(
         userDetails.getAuthorities().stream().map(
           GrantedAuthority::getAuthority).collect(Collectors.joining(",")
