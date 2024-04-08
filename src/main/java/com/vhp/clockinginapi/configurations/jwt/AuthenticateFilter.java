@@ -40,12 +40,10 @@ public class AuthenticateFilter extends OncePerRequestFilter {
                     
         var rolesFromClaim = jwtDecoded.getClaim("roles").asList(Object.class);
 
-        List<SimpleGrantedAuthority> authorities = rolesFromClaim.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase())).toList();
-
-        System.out.println(authorities);
+        List<SimpleGrantedAuthority> authorities = rolesFromClaim.stream().map(role -> new SimpleGrantedAuthority(role.toString().toUpperCase())).toList();
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(jwtDecoded.getSubject(), null, authorities);
-                    
+        
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
     filterChain.doFilter(request, response);
