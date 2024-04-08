@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.vhp.clockinginapi.models.builders.CheckPointBuider;
 
 import jakarta.persistence.Column;
@@ -35,6 +37,18 @@ public class CheckPointEntity {
   LocalDateTime timeStamp;
 
   private Boolean lunchBreak;
+
+  public CheckPointEntity() {
+    
+  }
+
+  public CheckPointEntity(UUID id, UserEntity user, UUID userId, LocalDateTime timeStamp, Boolean lunchBreak){
+    this.id = id;
+    this.user = user;
+    this.userId = userId;
+    this.timeStamp = timeStamp;
+    this.lunchBreak = lunchBreak;
+  }
 
   public static CheckPointBuider builder() {
     return new CheckPointBuider();
