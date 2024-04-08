@@ -3,6 +3,7 @@ package com.vhp.clockinginapi.configurations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,11 +14,12 @@ import com.vhp.clockinginapi.configurations.jwt.AuthenticateFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfiguration {
   
   private static final String[] PERMITED_LIST = { "/authenticate" };
 
-  private final AuthenticationProvider authenticationProvider;
+  private AuthenticationProvider authenticationProvider;
   private AuthenticateFilter authenticateFilter;
 
   public SecurityConfiguration(AuthenticationProvider authenticationProvider, AuthenticateFilter authenticateFilter) {
@@ -30,7 +32,7 @@ public class SecurityConfiguration {
     http
       .csrf(crsf -> crsf.disable())
       .authorizeHttpRequests(req -> req.requestMatchers(PERMITED_LIST).permitAll()
-              .anyRequest().authenticated())
+                                    .anyRequest().authenticated())
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authenticationProvider(authenticationProvider)
       .addFilterBefore(authenticateFilter, UsernamePasswordAuthenticationFilter.class);
