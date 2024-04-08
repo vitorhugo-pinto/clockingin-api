@@ -36,6 +36,18 @@ public class CheckPointEntity {
 
   private Boolean lunchBreak;
 
+  public CheckPointEntity() {
+    
+  }
+
+  public CheckPointEntity(UUID id, UserEntity user, UUID userId, LocalDateTime timeStamp, Boolean lunchBreak){
+    this.id = id;
+    this.user = user;
+    this.userId = userId;
+    this.timeStamp = timeStamp;
+    this.lunchBreak = lunchBreak;
+  }
+
   public static CheckPointBuider builder() {
     return new CheckPointBuider();
   }
