@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.vhp.clockinginapi.models.builders.CheckPointBuider;
 
 import jakarta.persistence.Column;
