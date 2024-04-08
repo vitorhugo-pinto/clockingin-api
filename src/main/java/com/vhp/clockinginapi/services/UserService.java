@@ -1,5 +1,6 @@
 package com.vhp.clockinginapi.services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vhp.clockinginapi.dtos.UserDTO;
@@ -12,13 +13,17 @@ public class UserService {
 
   private UserRepository userRepository;
   private UserMapper userMapper;
+  private PasswordEncoder passwordEncoder;
 
-  UserService(UserRepository userRepository, UserMapper userMapper) {
+  UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.userMapper = userMapper;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public UserDTO create(UserDTO dto){
+    dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+    
     UserEntity user = this.userMapper.toEntity(dto);
 
     UserEntity response = this.userRepository.save(user);

@@ -1,10 +1,15 @@
 package com.vhp.clockinginapi.models;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.vhp.clockinginapi.models.builders.UserBuilder;
 import com.vhp.clockinginapi.models.enums.JobType;
@@ -24,7 +29,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -104,10 +109,6 @@ public class UserEntity {
       this.jobType = jobType;
     }
 
-    public String getUsername() {
-        return this.login;
-    }
-
     public LocalDateTime getCreatedAt() {
       return createdAt;
     }
@@ -133,4 +134,35 @@ public class UserEntity {
     public int hashCode() {
         return Objects.hash(super.hashCode(), login, password, role);
     }
+
+    @Override
+    public String getUsername() {
+        return this.login;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.getRole().name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 }

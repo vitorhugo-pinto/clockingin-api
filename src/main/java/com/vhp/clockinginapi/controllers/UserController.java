@@ -1,6 +1,7 @@
 package com.vhp.clockinginapi.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class UserController {
   }
 
   @PostMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<ApiResponseDTO<UserDTO>> create(@Valid @RequestBody UserDTO dto) {
     return ResponseEntity.ok(
       new ApiResponseDTO<>(
