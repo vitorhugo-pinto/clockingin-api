@@ -19,6 +19,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -29,6 +30,7 @@ public class UserEntity {
     private UUID id;
 
     @Column(nullable = false)
+    @Pattern(regexp = "^(?!\\s*$).+", message = "Username can't have empty spaces")
     @NotBlank(message = "Login is mandatory.")
     private String login;
 
