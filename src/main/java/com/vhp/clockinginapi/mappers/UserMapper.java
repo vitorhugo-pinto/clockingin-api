@@ -11,6 +11,7 @@ public class UserMapper {
     public UserDTO toDto(UserEntity entity) {
         return new UserDTO(
                 entity.getId(),
+                entity.getName(),
                 entity.getLogin(),
                 entity.getPassword(),
                 entity.getRole(),
@@ -20,12 +21,13 @@ public class UserMapper {
 
     public UserEntity toEntity(UserDTO userDTO) {
         return UserEntity.builder()
-                .id(userDTO.id())
-                .login(userDTO.login())
-                .password(userDTO.password())
-                .role(userDTO.role())
-                .jobType(userDTO.jobType())
-                .createdAt(userDTO.createdAt())
+                .id(userDTO.getId())
+                .name(userDTO.getName())
+                .login(userDTO.getLogin())
+                .password(userDTO.getPassword())
+                .role(userDTO.getRole())
+                .jobType(userDTO.getJobType())
+                .createdAt(userDTO.getCreatedAt())
                 .build();
     }
 }

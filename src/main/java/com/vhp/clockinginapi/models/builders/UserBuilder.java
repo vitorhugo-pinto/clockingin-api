@@ -10,6 +10,7 @@ import com.vhp.clockinginapi.models.enums.Role;
 public class UserBuilder {
 
   private UUID id;
+  private String name;
   private String login;
   private String password;
   private Role role;
@@ -20,6 +21,11 @@ public class UserBuilder {
       this.id = id;
       return this;
   }
+
+  public UserBuilder name(String name) {
+    this.name = name;
+    return this;
+}
 
   public UserBuilder login(String login) {
       this.login = login;
@@ -49,6 +55,7 @@ public class UserBuilder {
   public UserEntity build() {
       UserEntity user = new UserEntity();
       user.setId(this.id);
+      user.setName(this.name);
       user.setLogin(this.login);
       user.setPassword(this.password);
       user.setRole(this.role);
