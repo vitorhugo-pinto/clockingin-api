@@ -14,7 +14,6 @@ import com.vhp.clockinginapi.dtos.ApiResponseDTO;
 import com.vhp.clockinginapi.dtos.CheckPointDTO;
 import com.vhp.clockinginapi.dtos.CheckPointRequestDTO;
 import com.vhp.clockinginapi.dtos.SummaryDTO;
-import com.vhp.clockinginapi.models.enums.JobType;
 import com.vhp.clockinginapi.services.CheckPointService;
 
 import jakarta.servlet.http.HttpServletRequest;
