@@ -20,6 +20,7 @@ import com.vhp.clockinginapi.utils.exceptions.DatePreviousThanLastRegisteredExce
 import com.vhp.clockinginapi.utils.exceptions.ErrorDTO;
 import com.vhp.clockinginapi.utils.exceptions.LoginAlreadyExists;
 import com.vhp.clockinginapi.utils.exceptions.LunchTimeBreakException;
+import com.vhp.clockinginapi.utils.exceptions.LoginAlreadyExists;
 import com.vhp.clockinginapi.utils.exceptions.ResourceNotFoundException;
 import com.vhp.clockinginapi.utils.exceptions.UserNoLunchBreakException;
 
