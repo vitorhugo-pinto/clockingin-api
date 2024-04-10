@@ -17,6 +17,7 @@ import com.vhp.clockinginapi.dtos.ApiResponseDTO;
 import com.vhp.clockinginapi.utils.exceptions.BusinessException;
 import com.vhp.clockinginapi.utils.exceptions.ErrorDTO;
 import com.vhp.clockinginapi.utils.exceptions.LoginAlreadyExists;
+import com.vhp.clockinginapi.utils.exceptions.LunchTimeBreakException;
 import com.vhp.clockinginapi.utils.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -110,6 +111,24 @@ public class ControllerExceptionHandler {
                 err));
     }
 
+    @ExceptionHandler(LunchTimeBreakException.class)
+    public ResponseEntity<ApiResponseDTO<ErrorDTO>> lunchTimeBreak(LunchTimeBreakException exception,
+            HttpServletRequest request) {
+
+        var err = new ErrorDTO(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Still in luch break time",
+                exception.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseDTO<ErrorDTO>(
+                false,
+                "Error: " + exception.getMessage(),
+                null,
+                err));
+    }
+
     @ExceptionHandler(LoginAlreadyExists.class)
     public ResponseEntity<ApiResponseDTO<ErrorDTO>> loginAlreadyExists(LoginAlreadyExists exception,
             HttpServletRequest request) {
@@ -127,8 +146,6 @@ public class ControllerExceptionHandler {
                 null,
                 err));
     }
-
-    
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseDTO<ErrorDTO>> internalErrorException(Exception e, HttpServletRequest request) {

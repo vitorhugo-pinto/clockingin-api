@@ -12,5 +12,5 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface CheckPointRepository extends JpaRepository<CheckPointEntity, UUID> {
-  List<CheckPointEntity> findAllByUserIdAndTimeStampBetween(UUID userId, LocalDateTime timeStampStart, LocalDateTime timeStampEnd);
+  List<CheckPointEntity> findAllByUserIdAndTimeStampBetweenOrderByTimeStampAsc(UUID userId, LocalDateTime timeStampStart, LocalDateTime timeStampEnd);
 }

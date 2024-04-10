@@ -34,12 +34,14 @@ public class CheckPointController {
   @PostMapping("/clock-in")
   @PreAuthorize("hasRole('EMPLOYEE')")
   public ResponseEntity<ApiResponseDTO<CheckPointDTO>> create(@Valid @RequestBody CheckPointRequestDTO dto, HttpServletRequest request) {
-    UUID userId = UUID.fromString(request.getAttribute("userId").toString()) ;
+    UUID userId = UUID.fromString(request.getAttribute("userId").toString());
+    String jobType = request.getAttribute("jobType").toString();
+
     return ResponseEntity.ok(
       new ApiResponseDTO<>(
         true,
         "Success. Clock in registered",
-        this.checkPointService.create(dto, userId),
+        this.checkPointService.create(dto, userId, jobType),
         null
       )
     );
