@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import com.vhp.clockinginapi.services.CheckPointService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/check-point")
 public class CheckPointController {
