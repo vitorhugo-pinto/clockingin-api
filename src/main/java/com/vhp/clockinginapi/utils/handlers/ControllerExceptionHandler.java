@@ -14,10 +14,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.vhp.clockinginapi.dtos.ApiResponseDTO;
+import com.vhp.clockinginapi.utils.exceptions.AlreadyInLunchBreakException;
 import com.vhp.clockinginapi.utils.exceptions.BusinessException;
+import com.vhp.clockinginapi.utils.exceptions.DatePreviousThanLastRegisteredException;
 import com.vhp.clockinginapi.utils.exceptions.ErrorDTO;
 import com.vhp.clockinginapi.utils.exceptions.LoginAlreadyExists;
+import com.vhp.clockinginapi.utils.exceptions.LunchTimeBreakException;
+import com.vhp.clockinginapi.utils.exceptions.LoginAlreadyExists;
 import com.vhp.clockinginapi.utils.exceptions.ResourceNotFoundException;
+import com.vhp.clockinginapi.utils.exceptions.UserNoLunchBreakException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
@@ -110,6 +115,78 @@ public class ControllerExceptionHandler {
                 err));
     }
 
+    @ExceptionHandler(AlreadyInLunchBreakException.class)
+    public ResponseEntity<ApiResponseDTO<ErrorDTO>> alreadyInLunchBreakException(AlreadyInLunchBreakException exception,
+            HttpServletRequest request) {
+
+        var err = new ErrorDTO(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "The new checkpoint cannot be a lunch time, because the last one was too.",
+                exception.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseDTO<ErrorDTO>(
+                false,
+                "Error: " + exception.getMessage(),
+                null,
+                err));
+    }
+
+    @ExceptionHandler(LunchTimeBreakException.class)
+    public ResponseEntity<ApiResponseDTO<ErrorDTO>> lunchTimeBreak(LunchTimeBreakException exception,
+            HttpServletRequest request) {
+
+        var err = new ErrorDTO(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Still in luch break time",
+                exception.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseDTO<ErrorDTO>(
+                false,
+                "Error: " + exception.getMessage(),
+                null,
+                err));
+    }
+
+    @ExceptionHandler(UserNoLunchBreakException.class)
+    public ResponseEntity<ApiResponseDTO<ErrorDTO>> userNoLunchBreakException(UserNoLunchBreakException exception,
+            HttpServletRequest request) {
+
+        var err = new ErrorDTO(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "This user cannnot take a break of the type lunch break.",
+                exception.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseDTO<ErrorDTO>(
+                false,
+                "Error: " + exception.getMessage(),
+                null,
+                err));
+    }
+
+    @ExceptionHandler(DatePreviousThanLastRegisteredException.class)
+    public ResponseEntity<ApiResponseDTO<ErrorDTO>> datePreviousThanLastRegisteredException(DatePreviousThanLastRegisteredException exception,
+            HttpServletRequest request) {
+
+        var err = new ErrorDTO(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Cannot register a date in the past.",
+                exception.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseDTO<ErrorDTO>(
+                false,
+                "Error: " + exception.getMessage(),
+                null,
+                err));
+    }
+
     @ExceptionHandler(LoginAlreadyExists.class)
     public ResponseEntity<ApiResponseDTO<ErrorDTO>> loginAlreadyExists(LoginAlreadyExists exception,
             HttpServletRequest request) {
@@ -127,8 +204,6 @@ public class ControllerExceptionHandler {
                 null,
                 err));
     }
-
-    
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseDTO<ErrorDTO>> internalErrorException(Exception e, HttpServletRequest request) {

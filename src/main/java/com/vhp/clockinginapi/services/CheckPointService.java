@@ -17,6 +17,10 @@ import com.vhp.clockinginapi.mappers.CheckPointMapper;
 import com.vhp.clockinginapi.models.CheckPointEntity;
 import com.vhp.clockinginapi.models.enums.JobType;
 import com.vhp.clockinginapi.repositories.CheckPointRepository;
+import com.vhp.clockinginapi.utils.exceptions.AlreadyInLunchBreakException;
+import com.vhp.clockinginapi.utils.exceptions.DatePreviousThanLastRegisteredException;
+import com.vhp.clockinginapi.utils.exceptions.LunchTimeBreakException;
+import com.vhp.clockinginapi.utils.exceptions.UserNoLunchBreakException;
 
 @Service
 public class CheckPointService {
@@ -29,9 +33,44 @@ public class CheckPointService {
     this.checkPointMapper = checkPointMapper;
   }
 
-  public CheckPointDTO create(CheckPointRequestDTO dto, UUID userId){
+  public CheckPointDTO create(CheckPointRequestDTO dto, UUID userId, String jobType){
+
+    // Checks if the JobType is PARTTIME, this one cannot have lunch break
+    if(jobType.replaceAll("\"", "").equals(JobType.PARTTIME.name()) && dto.lunchBreak()){
+      throw new UserNoLunchBreakException("User can not go on lunch break");
+    }
+
+    LocalDateTime START_OF_DAY = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+    LocalDateTime END_OF_DAY = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+    Long LUNCH_BREAK_DURATION_MINUTES = 60L;
+
+    List<CheckPointEntity> userCheckPoints = this.checkPointRepository.findAllByUserIdAndTimeStampBetweenOrderByTimeStampAsc(userId, START_OF_DAY, END_OF_DAY);
+
+    // Checks if the date inserted is previous to the on last registered
+    if(!userCheckPoints.isEmpty()){
+      var lastCheckPointRegistered = userCheckPoints.get(userCheckPoints.size() - 1);
+      if(ChronoUnit.MINUTES.between(lastCheckPointRegistered.getTimeStamp(), dto.timeStamp()) < 0){
+        throw new DatePreviousThanLastRegisteredException("The date cannot be previous to the one last registered");
+      }
+    }
+
+    // Checks lunch time conditions
+    if(!userCheckPoints.isEmpty()){
+      var lastCheckPointRegistered = userCheckPoints.get(userCheckPoints.size() - 1);
+
+      Long diffInMinutes = ChronoUnit.MINUTES.between(lastCheckPointRegistered.getTimeStamp(), dto.timeStamp());
+
+      if(lastCheckPointRegistered.getLunchBreak() && dto.lunchBreak()) {
+        throw new AlreadyInLunchBreakException("Already in lunch break");
+      }
+
+      if(lastCheckPointRegistered.getLunchBreak() && diffInMinutes < LUNCH_BREAK_DURATION_MINUTES) {
+        throw new LunchTimeBreakException("Still in lunch time");
+      }
+    }
+
     CheckPointEntity checkPoint = CheckPointEntity.builder().timeStamp(dto.timeStamp()).lunchBreak(dto.lunchBreak()).build();
-    
+
     checkPoint.setUserId(userId);
     
     CheckPointEntity response = this.checkPointRepository.save(checkPoint);
@@ -44,11 +83,10 @@ public class CheckPointService {
     long PARTTIME_WORKING_HOURS_IN_MINUTES = 60 * 6;
     jobType = jobType.replaceAll("\"", "");
 
-    LocalDateTime startOfTheDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+    LocalDateTime START_OF_DAY = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+    LocalDateTime END_OF_DAY = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
     
-    LocalDateTime endOfTheDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-    
-    List<CheckPointEntity> userCheckPoints = this.checkPointRepository.findAllByUserIdAndTimeStampBetween(userId, startOfTheDay, endOfTheDay);
+    List<CheckPointEntity> userCheckPoints = this.checkPointRepository.findAllByUserIdAndTimeStampBetweenOrderByTimeStampAsc(userId, START_OF_DAY, END_OF_DAY);
 
     List<CheckPointResponseDTO> checkPointResponse = this.checkPointMapper.toDto(userCheckPoints);
 
