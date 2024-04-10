@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.vhp.clockinginapi.dtos.ApiResponseDTO;
 import com.vhp.clockinginapi.utils.exceptions.BusinessException;
 import com.vhp.clockinginapi.utils.exceptions.ErrorDTO;
+import com.vhp.clockinginapi.utils.exceptions.LoginAlreadyExists;
 import com.vhp.clockinginapi.utils.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -109,6 +110,25 @@ public class ControllerExceptionHandler {
                 err));
     }
 
+    @ExceptionHandler(LoginAlreadyExists.class)
+    public ResponseEntity<ApiResponseDTO<ErrorDTO>> loginAlreadyExists(LoginAlreadyExists exception,
+            HttpServletRequest request) {
+
+        var err = new ErrorDTO(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "User already exists",
+                exception.getMessage(),
+                request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponseDTO<ErrorDTO>(
+                false,
+                "Error: " + exception.getMessage(),
+                null,
+                err));
+    }
+
+    
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseDTO<ErrorDTO>> internalErrorException(Exception e, HttpServletRequest request) {
