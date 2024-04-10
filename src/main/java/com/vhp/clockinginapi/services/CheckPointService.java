@@ -17,7 +17,7 @@ import com.vhp.clockinginapi.mappers.CheckPointMapper;
 import com.vhp.clockinginapi.models.CheckPointEntity;
 import com.vhp.clockinginapi.models.enums.JobType;
 import com.vhp.clockinginapi.repositories.CheckPointRepository;
-import com.vhp.clockinginapi.utils.exceptions.AlreadyInLunchBreakException;
+import com.vhp.clockinginapi.utils.exceptions.AlreadyHadLunchException;
 import com.vhp.clockinginapi.utils.exceptions.DatePreviousThanLastRegisteredException;
 import com.vhp.clockinginapi.utils.exceptions.LunchTimeBreakException;
 import com.vhp.clockinginapi.utils.exceptions.UserNoLunchBreakException;
@@ -56,12 +56,21 @@ public class CheckPointService {
 
     // Checks lunch time conditions
     if(!userCheckPoints.isEmpty()){
+      var alreadyHadLunch = false;
+
+      for ( var i = 0; i < userCheckPoints.size(); i++) {
+        if(userCheckPoints.get(i).getLunchBreak()) {
+          alreadyHadLunch = true;
+          break;
+        } 
+      }
+
       var lastCheckPointRegistered = userCheckPoints.get(userCheckPoints.size() - 1);
 
       Long diffInMinutes = ChronoUnit.MINUTES.between(lastCheckPointRegistered.getTimeStamp(), dto.timeStamp());
 
-      if(lastCheckPointRegistered.getLunchBreak() && dto.lunchBreak()) {
-        throw new AlreadyInLunchBreakException("Already in lunch break");
+      if(alreadyHadLunch && dto.lunchBreak()) {
+        throw new AlreadyHadLunchException("Already in lunch break");
       }
 
       if(lastCheckPointRegistered.getLunchBreak() && diffInMinutes < LUNCH_BREAK_DURATION_MINUTES) {

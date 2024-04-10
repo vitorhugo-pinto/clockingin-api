@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.vhp.clockinginapi.dtos.ApiResponseDTO;
-import com.vhp.clockinginapi.utils.exceptions.AlreadyInLunchBreakException;
+import com.vhp.clockinginapi.utils.exceptions.AlreadyHadLunchException;
 import com.vhp.clockinginapi.utils.exceptions.BusinessException;
 import com.vhp.clockinginapi.utils.exceptions.DatePreviousThanLastRegisteredException;
 import com.vhp.clockinginapi.utils.exceptions.ErrorDTO;
 import com.vhp.clockinginapi.utils.exceptions.LoginAlreadyExists;
 import com.vhp.clockinginapi.utils.exceptions.LunchTimeBreakException;
-import com.vhp.clockinginapi.utils.exceptions.LoginAlreadyExists;
 import com.vhp.clockinginapi.utils.exceptions.ResourceNotFoundException;
 import com.vhp.clockinginapi.utils.exceptions.UserNoLunchBreakException;
 
@@ -115,8 +114,8 @@ public class ControllerExceptionHandler {
                 err));
     }
 
-    @ExceptionHandler(AlreadyInLunchBreakException.class)
-    public ResponseEntity<ApiResponseDTO<ErrorDTO>> alreadyInLunchBreakException(AlreadyInLunchBreakException exception,
+    @ExceptionHandler(AlreadyHadLunchException.class)
+    public ResponseEntity<ApiResponseDTO<ErrorDTO>> alreadyInLunchBreakException(AlreadyHadLunchException exception,
             HttpServletRequest request) {
 
         var err = new ErrorDTO(
