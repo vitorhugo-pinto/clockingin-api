@@ -12,6 +12,7 @@ import com.vhp.clockinginapi.dtos.ApiResponseDTO;
 import com.vhp.clockinginapi.dtos.UserDTO;
 import com.vhp.clockinginapi.services.UserService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @CrossOrigin
@@ -27,6 +28,7 @@ public class UserController {
 
   @PostMapping
   @PreAuthorize("hasRole('ADMIN')")
+  @SecurityRequirement(name = "jwt_auth")
   public ResponseEntity<ApiResponseDTO<UserDTO>> create(@Valid @RequestBody UserDTO dto) {
     return ResponseEntity.ok(
       new ApiResponseDTO<>(
