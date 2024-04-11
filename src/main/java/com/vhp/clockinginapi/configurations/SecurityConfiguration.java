@@ -17,7 +17,10 @@ import com.vhp.clockinginapi.configurations.jwt.AuthenticateFilter;
 @EnableMethodSecurity
 public class SecurityConfiguration {
   
-  private static final String[] PERMITED_LIST = { "/authenticate" };
+  private static final String[] PERMITED_LIST = { "/authenticate",
+                  "/swagger-ui/**",
+                  "/v3/api-docs/**",
+                  "/swagger-resources/**" };
 
   private AuthenticationProvider authenticationProvider;
   private AuthenticateFilter authenticateFilter;

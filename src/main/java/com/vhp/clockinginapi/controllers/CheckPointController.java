@@ -17,6 +17,7 @@ import com.vhp.clockinginapi.dtos.CheckPointRequestDTO;
 import com.vhp.clockinginapi.dtos.SummaryDTO;
 import com.vhp.clockinginapi.services.CheckPointService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -33,6 +34,7 @@ public class CheckPointController {
 
   @PostMapping("/clock-in")
   @PreAuthorize("hasRole('EMPLOYEE')")
+  @SecurityRequirement(name = "jwt_auth")
   public ResponseEntity<ApiResponseDTO<CheckPointDTO>> create(@Valid @RequestBody CheckPointRequestDTO dto, HttpServletRequest request) {
     UUID userId = UUID.fromString(request.getAttribute("userId").toString());
     String jobType = request.getAttribute("jobType").toString();
@@ -49,6 +51,7 @@ public class CheckPointController {
 
   @GetMapping("/summary")
   @PreAuthorize("hasRole('EMPLOYEE')")
+  @SecurityRequirement(name = "jwt_auth")
   public ResponseEntity<ApiResponseDTO<SummaryDTO>> create(HttpServletRequest request) {
     UUID userId = UUID.fromString(request.getAttribute("userId").toString());
     String jobType = request.getAttribute("jobType").toString();
