@@ -78,26 +78,6 @@ OBS: Option outside of Docker: run a PostgreSQL whit the configuration of `sprin
 
 ---
 
-## Swagger
-
-- [Swagger](http://testes-asc.imd.ufrn.br:8070/api/user-permission/swagger-ui/index.html)
-
----
-
-## Compiling
-
-1. Run `mvn clean install` to generate the jar file at `/target`.
-
-2. Therefore, run `java -jar [generated-name]` as the example below:
-
-```sh
-
-java -jar target/clocking-api-0.0.1-SNAPSHOT.jar
-
-```
-
----
-
 ## Folder structure
 
 - `/docker` - for any docker configuration necessary.
