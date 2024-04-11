@@ -46,7 +46,7 @@ The following DER represent the relations between entities, althoug JOBTYPE and 
 1. Clone the project to a given folder
 
 ```sh
-git clone https://projetos.imd.ufrn.br/acer/back-end/ms-users-permissions.git
+git clone git@github.com:vitorhugo-pinto/clockingin-api.git
 ```
 
 2. To run a local database using docker cd to the `/docker` folder and run the command `docker compose up -d`. [For more info about the command](https://docs.docker.com/engine/reference/commandline/compose_up).
