@@ -76,6 +76,11 @@ OBS: Option outside of Docker: run a PostgreSQL whit the configuration of `sprin
   - For the VS Code user, check out this amazing guide for Java in it. By [Loiane Groner](https://github.com/loiane)
 - [VS Code for Java - Complete Guide by Loiane Groner](https://loiane.com/2024/03/visual-studio-code-for-java-the-complete-guide/)
 
+- __OR JUST RUN THE FOLLOWING COMMAND WITHIN THE ROOT PROJECT FOLER__
+  ```sh
+  mvn spring-boot:run
+  ```
+
 ---
 
 ## Folder structure
