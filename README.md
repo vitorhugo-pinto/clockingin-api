@@ -24,6 +24,7 @@ values (gen_random_uuid(), NOW(), 'FULLTIME', 'admin', 'admin', crypt('admin', g
 
 ### DER
 The following DER represent the relations between entities, althoug JOBTYPE and ROLE could have been other TABLES, due to the small size of the project it was opted to use them as attributes.
+
 <img width="363" alt="Screenshot 2024-04-10 at 22 04 40" src="https://github.com/vitorhugo-pinto/clockingin-api/assets/83354219/a096dc61-1b03-412e-a7c1-366415f302af">
 
 ---
@@ -31,10 +32,12 @@ The following DER represent the relations between entities, althoug JOBTYPE and 
 ## Features
 -  Swagger: /swagger-ui/index.html
 <img width="708" alt="Screenshot 2024-04-10 at 22 22 43" src="https://github.com/vitorhugo-pinto/clockingin-api/assets/83354219/55eb301a-85f5-4395-8be0-f5ddff793cda">
-/user -> creates an user (ADMIN role only)
-/check-point/clock-in -> registers the employee clock in time, can be lunch break or not.
-/check-point/summary -> lists all checkpoints from the user, the work balance hours for the day and if the users mets the hours for his jouney type (JOBTYPE -> FULLTIME (8hrs/day) or PARTTIME (6/hrs) (Note: PARTTIME cannot have lunch break check point)
-/authenticate -> auth an given user
+
+
+- /user -> creates an user (ADMIN role only)
+- /check-point/clock-in -> registers the employee clock in time, can be lunch break or not.
+- /check-point/summary -> lists all checkpoints from the user, the work balance hours for the day and if the users mets the hours for his jouney type (JOBTYPE -> FULLTIME (8hrs/day) or PARTTIME (6/hrs) (Note: PARTTIME cannot have lunch break check point)
+- /authenticate -> auth an given user
 
 ---
 
